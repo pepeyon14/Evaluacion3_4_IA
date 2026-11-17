@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evaluación 3 y 4 — Segmentación Fotovoltaica y Automatización (Planta Lechuzas)</title>
+  <style>
+    :root {
+      --bg: #0b1120;
+      --card: #151f32;
+      --card-alt: #1e293b;
+      --border: #2e3f5c;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --purple: #8b5cf6;
+      --blue: #38bdf8;
+      --green: #10b981;
+      --amber: #f59e0b;
+      --red: #f43f5e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 28px 18px 70px;
+    }
+    .container { max-width: 1160px; margin: 0 auto; }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.16), rgba(56, 189, 248, 0.12), rgba(139, 92, 246, 0.16));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px 32px;
+      margin-bottom: 28px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: rgba(245, 158, 11, 0.2);
+      color: #fde68a;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      margin-bottom: 10px;
+    }
+    .hero h1 { font-size: 1.85rem; margin-bottom: 8px; }
+    .hero p { color: var(--muted); max-width: 900px; font-size: 0.96rem; }
+
+    /* Navigation Pills */
+    .nav-tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+    .nav-tabs a {
+      text-decoration: none;
+      color: var(--text);
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      transition: all 0.15s;
+    }
+    .nav-tabs a:hover { border-color: var(--amber); color: var(--amber); }
+
+    /* Section Card */
+    .section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 26px 28px;
+      margin-bottom: 28px;
+    }
+    .sec-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sec-num {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--amber);
+      color: #000;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.98rem;
+      flex-shrink: 0;
+    }
+    .sec-head h2 { font-size: 1.25rem; }
+    .sec-tag {
+      margin-left: auto;
+      font-family: Consolas, monospace;
+      font-size: 0.8rem;
+      background: var(--bg);
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      color: var(--blue);
+    }
+
+    /* Concept Map Diagram */
+    .concept-map {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+    .cm-root {
+      text-align: center;
+      max-width: 580px;
+      margin: 0 auto 20px;
+      background: linear-gradient(135deg, rgba(139,92,246,0.25), rgba(56,189,248,0.2));
+      border: 2px solid var(--purple);
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+    .cm-branches {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 900px) { .cm-branches { grid-template-columns: 1fr; } }
+    .cm-col {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .cm-col.highlight { border: 2px solid var(--amber); }
+    .cm-col h3 { font-size: 1rem; display: flex; align-items: center; gap: 8px; }
+    .cm-node {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 0.83rem;
+    }
+    .cm-node strong { color: var(--blue); display: block; margin-bottom: 2px; }
+
+    /* Comparison Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin-top: 10px;
+    }
+    th, td {
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    th { background: var(--bg); color: var(--amber); font-weight: 700; }
+    code {
+      font-family: Consolas, monospace;
+      background: rgba(255,255,255,0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #7dd3fc;
+      font-size: 0.84em;
+    }
+
+    /* Grids */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    @media (max-width: 900px) {
+      .grid-2, .grid-4 { grid-template-columns: 1fr; }
+    }
+
+    /* Cluster Cards */
+    .cluster-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      border-top: 4px solid var(--blue);
+    }
+    .cluster-card.c0 { border-top-color: #64748b; }
+    .cluster-card.c1 { border-top-color: var(--blue); }
+    .cluster-card.c2 { border-top-color: var(--green); }
+    .cluster-card.c3 { border-top-color: var(--amber); }
+    .cluster-card h4 { font-size: 0.96rem; margin-bottom: 4px; }
+    .cluster-pct {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--card-alt);
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .stat-list {
+      font-family: Consolas, monospace;
+      font-size: 0.8rem;
+      background: var(--card);
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      line-height: 1.7;
+    }
+
+    /* Simulator */
+    .preset-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 14px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      background: var(--card-alt);
+      color: var(--text);
+      border: 1px solid var(--border);
+      transition: all 0.15s;
+    }
+    button:hover { border-color: var(--amber); }
+    button.active-btn { background: var(--amber); color: #000; border-color: var(--amber); }
+
+    .sim-inputs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    @media (max-width: 850px) { .sim-inputs { grid-template-columns: 1fr; } }
+    .inp-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      border-radius: 10px;
+    }
+    .inp-box label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+    .inp-box label span { color: var(--text); font-family: Consolas, monospace; font-weight: 700; }
+    input[type="range"] { width: 100%; accent-color: var(--amber); }
+    select {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 6px;
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--border);
+      font-size: 0.84rem;
+    }
+    pre {
+      font-family: Consolas, monospace;
+      font-size: 0.8rem;
+      background: var(--bg);
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      overflow-x: auto;
+    }
+
+    /* Q&A Accordion cards */
+    .qa-grid { display: flex; flex-direction: column; gap: 12px; }
+    .qa-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--amber);
+      border-radius: 10px;
+      padding: 14px 18px;
+    }
+    .qa-card h4 { color: #fde68a; font-size: 0.95rem; margin-bottom: 6px; }
+    .qa-card p { color: var(--muted); font-size: 0.88rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- ENCABEZADO -->
+    <div class="hero">
+      <span class="badge">Evaluación 3 y Evaluación 4 — Inteligencia Artificial</span>
+      <h1>☀️ Segmentación Fotovoltaica y Automatización en Producción (Planta Lechuzas)</h1>
+      <p>
+        Documento integral interactivo con los <strong>3 Entregables de la Evaluación 3</strong> (Mapa Conceptual Teórico, EDA + Clusterización K-Means sobre 105,216 registros, y Pipeline Automatizado en Producción con FastAPI) más la <strong>Defensa Técnica de la Evaluación 4</strong>.
+      </p>
+      <div class="nav-tabs">
+        <a href="#entregable1">1. Mapa Conceptual Teórico</a>
+        <a href="#entregable2">2. EDA, Método del Codo y Clusters</a>
+        <a href="#entregable3">3. Simulador de API en Producción</a>
+        <a href="#evaluacion4">4. Preguntas de Interrogación (Ev. 4)</a>
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         ENTREGABLE 1: MAPA CONCEPTUAL TEÓRICO
+         ===================================================================== -->
+    <div class="section" id="entregable1">
+      <div class="sec-head">
+        <div class="sec-num">1</div>
+        <h2>Entregable 1: Mapa Conceptual Teórico — Clusterización vs. Clasificación</h2>
+        <span class="sec-tag">Ev. 3 — Parte Teórica</span>
+      </div>
+
+      <div class="concept-map">
+        <div class="cm-root">
+          ANALÍTICA DE MONITOREO FOTOVOLTAICO (105,216 registros sin etiquetar)<br/>
+          <span style="font-size:0.82rem; font-weight:400; color:var(--muted);">
+            Fase 1: Descubrir estados ocultos (No Supervisado) ➔ Fase 2: Automatizar predicción en tiempo real (Supervisado)
+          </span>
+        </div>
+
+        <div class="cm-branches">
+          <!-- K-MEANS -->
+          <div class="cm-col highlight">
+            <h3>⭐ 1. Enfoque Particional: K-Means <span style="font-size:0.72rem; background:var(--amber); color:#000; padding:2px 6px; border-radius:4px;">ELEGIDO</span></h3>
+            <div class="cm-node">
+              <strong>Fundamento Matemático</strong>
+              Divide los datos en <em>K</em> grupos minimizando la <strong>Inercia o WCSS</strong> (suma de distancias euclidianas al cuadrado entre cada punto y su centroide μ<sub>k</sub>).
+            </div>
+            <div class="cm-node">
+              <strong>Complejidad y Escalabilidad</strong>
+              Lineal <code>O(N · K · I · d)</code>. Procesa las <strong>105,216 filas en ~0.4 segundos</strong> con bajo uso de memoria RAM.
+            </div>
+            <div class="cm-node">
+              <strong>Ventajas y Desventajas</strong>
+              ✅ Rápido, escalable, centroides físicamente interpretables.<br/>
+              ⚠️ Requiere definir <em>K</em> previamente (con Método del Codo) y exige escalar variables (<code>StandardScaler</code>).
+            </div>
+          </div>
+
+          <!-- DENDROGRAMA / JERÁRQUICO -->
+          <div class="cm-col">
+            <h3>🌳 2. Enfoque Jerárquico: Dendrograma</h3>
+            <div class="cm-node">
+              <strong>Fundamento Matemático</strong>
+              <em>Agglomerative Clustering</em>: inicia con cada punto como un cluster y los fusiona iterativamente según una matriz de enlaces (<em>Ward</em>, <em>Complete</em>, <em>Average</em> o <em>Single linkage</em>).
+            </div>
+            <div class="cm-node">
+              <strong>Limitación Crítica en este Dataset</strong>
+              Complejidad <code>O(N²)</code> en memoria y <code>O(N³)</code> en CPU. Una matriz de distancias de <code>105,216 × 105,216</code> requiere <strong>~88 GB de RAM</strong>, siendo inviable sin muestreo.
+            </div>
+            <div class="cm-node">
+              <strong>Ventajas y Desventajas</strong>
+              ✅ No requiere fijar <em>K</em> al inicio; el árbol visual muestra toda la jerarquía.<br/>
+              ⚠️ No escala a grandes volúmenes y no tiene función <code>predict()</code> directa para datos nuevos.
+            </div>
+          </div>
+
+          <!-- CLASIFICACIÓN SUPERVISADA -->
+          <div class="cm-col">
+            <h3>🚀 3. Clasificación Supervisada (Producción)</h3>
+            <div class="cm-node">
+              <strong>Puente No Supervisado ➔ Supervisado</strong>
+              Los clusters <code>{0, 1, 2, 3}</code> descubiertos por K-Means se asignan como columna objetivo (<code>y</code>) para entrenar un <code>RandomForestClassifier</code>.
+            </div>
+            <div class="cm-node">
+              <strong>Por qué se usa en Producción</strong>
+              Entrega <strong>probabilidades de confianza</strong> (<code>predict_proba</code>), es robusto frente a ruido puntual de sensores y se empaqueta en <code>.pkl</code> dentro de <strong>FastAPI</strong>.
+            </div>
+            <div class="cm-node">
+              <strong>Métricas de Validación</strong>
+              Se evalúa con matriz de confusión, <em>Accuracy</em> (<code>99.9%</code>), <em>Precision</em>, <em>Recall</em> y <em>F1-Score</em> sobre un 20% de prueba estratificado.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABLA DE MÉTRICAS -->
+      <h3 style="font-size:1rem; margin-bottom:8px;">Tabla Comparativa de Métricas de Evaluación</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Métrica</th>
+            <th>Tipo de Aprendizaje</th>
+            <th>Qué mide matemáticamente</th>
+            <th>Criterio de decisión</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Inercia (WCSS / Método del Codo)</strong></td>
+            <td>No Supervisado (Interna)</td>
+            <td>Suma de distancias al cuadrado de cada punto a su centroide.</td>
+            <td>Buscar el punto de inflexión ("codo") donde agregar más clusters ya no reduce significativamente la varianza (<code>k = 4</code>).</td>
+          </tr>
+          <tr>
+            <td><strong>Silhouette Score</strong></td>
+            <td>No Supervisado (Interna)</td>
+            <td>Compara la cohesión intra-cluster <em>a(i)</em> contra la separación al cluster vecino más cercano <em>b(i)</em>, en rango <code>[-1, 1]</code>.</td>
+            <td>Valores más cercanos a <code>+1</code> indican clusters densos y bien separados.</td>
+          </tr>
+          <tr>
+            <td><strong>Índice Davies-Bouldin</strong></td>
+            <td>No Supervisado (Interna)</td>
+            <td>Razón promedio entre la dispersión dentro de cada cluster y la distancia entre sus centroides.</td>
+            <td><strong>Menor es mejor</strong> (valores cercanos a <code>0</code> indican mínima superposición).</td>
+          </tr>
+          <tr>
+            <td><strong>Índice Calinski-Harabasz</strong></td>
+            <td>No Supervisado (Interna)</td>
+            <td>Cociente entre la dispersión inter-cluster y la dispersión intra-cluster.</td>
+            <td><strong>Mayor es mejor</strong> (clusters compactos y bien distanciados).</td>
+          </tr>
+          <tr>
+            <td><strong>Accuracy / F1-Score / Recall</strong></td>
+            <td>Supervisado (Externa)</td>
+            <td>Exactitud del clasificador <code>RandomForest</code> al replicar la asignación de régimen sobre el 20% de test.</td>
+            <td>Cercano a <code>1.00</code> (nuestro clasificador logra <code>> 0.998</code> en los 4 regímenes).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- =====================================================================
+         ENTREGABLE 2: EDA, PREPROCESAMIENTO Y RESULTADOS DE K-MEANS
+         ===================================================================== -->
+    <div class="section" id="entregable2">
+      <div class="sec-head">
+        <div class="sec-num">2</div>
+        <h2>Entregable 2: Preprocesamiento, Método del Codo y Regímenes Descubiertos</h2>
+        <span class="sec-tag">01_clusterizacion_y_eda.py</span>
+      </div>
+
+      <div class="grid-2" style="margin-bottom:22px;">
+        <!-- Decisiones de Preprocesamiento -->
+        <div>
+          <h3 style="font-size:1rem; margin-bottom:10px; color:var(--amber);">Decisiones Técnicas de Preprocesamiento</h3>
+          <div class="qa-grid">
+            <div class="qa-card">
+              <h4>1. Eliminación de la columna <code>id</code></h4>
+              <p><code>id</code> va de <code>0</code> a <code>105,215</code>. Si se incluyera en K-Means, el algoritmo agruparía por fecha/orden del archivo en vez de agrupar por estado físico del panel.</p>
+            </div>
+            <div class="qa-card">
+              <h4>2. Corrección de Radiación Negativa (45,142 registros)</h4>
+              <p>Durante la noche el sensor piranómetro registra entre <code>-1.0</code> y <code>-10.0 W/m²</code> por enfriamiento radiativo. Físicamente no existe irradiancia solar negativa, por lo que se truncó con <code>clip(lower=0.0)</code>.</p>
+            </div>
+            <div class="qa-card">
+              <h4>3. Escalamiento con <code>StandardScaler</code></h4>
+              <p>La <code>Potencia</code> llega a <code>-3,133 W</code> mientras que la <code>Temperatura</code> ronda los <code>15 °C</code>. Sin escalar a media <code>0</code> y desviación <code>1</code>, la variable <code>Potencia</code> dominaría el 90% de la distancia euclidiana.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gráfico SVG Método del Codo -->
+        <div style="background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:18px;">
+          <h3 style="font-size:0.98rem; margin-bottom:6px;">Gráfico del Método del Codo (Inercia Real sobre 105,216 filas)</h3>
+          <p style="font-size:0.8rem; color:var(--muted); margin-bottom:12px;">
+            Se observa una caída pronunciada de <code>k=1</code> (420,864) a <code>k=4</code> (53,219.5), donde la curva se estabiliza formando el codo óptimo en <strong>4 regímenes solares</strong>:
+          </p>
+          <svg viewBox="0 0 480 230" width="100%" height="220">
+            <!-- Ejes -->
+            <line x1="55" y1="20" x2="55" y2="190" stroke="#334155" stroke-width="1.5"/>
+            <line x1="55" y1="190" x2="450" y2="190" stroke="#334155" stroke-width="1.5"/>
+            <!-- Líneas guía -->
+            <line x1="55" y1="50" x2="450" y2="50" stroke="#1e293b" stroke-dasharray="4"/>
+            <line x1="55" y1="100" x2="450" y2="100" stroke="#1e293b" stroke-dasharray="4"/>
+            <line x1="55" y1="150" x2="450" y2="150" stroke="#1e293b" stroke-dasharray="4"/>
+            <!-- Etiquetas Y -->
+            <text x="48" y="30" fill="#94a3b8" font-size="10" text-anchor="end">420k</text>
+            <text x="48" y="103" fill="#94a3b8" font-size="10" text-anchor="end">200k</text>
+            <text x="48" y="153" fill="#94a3b8" font-size="10" text-anchor="end">80k</text>
+            <text x="48" y="190" fill="#94a3b8" font-size="10" text-anchor="end">0</text>
+            <!-- Curva WCSS: k=1(420.8k), k=2(102.6k), k=3(72.3k), k=4(53.2k), k=5(45.2k), k=6(38.0k) -->
+            <polyline fill="none" stroke="#38bdf8" stroke-width="3"
+              points="75,25 145,148 215,160 285,168 355,172 425,175"/>
+            <!-- Puntos -->
+            <circle cx="75" cy="25" r="5" fill="#38bdf8"/>
+            <circle cx="145" cy="148" r="5" fill="#38bdf8"/>
+            <circle cx="215" cy="160" r="5" fill="#38bdf8"/>
+            <circle cx="285" cy="168" r="8" fill="#f59e0b" stroke="#fff" stroke-width="2"/>
+            <circle cx="355" cy="172" r="5" fill="#38bdf8"/>
+            <circle cx="425" cy="175" r="5" fill="#38bdf8"/>
+            <!-- Anotación Codo k=4 -->
+            <line x1="285" y1="115" x2="285" y2="156" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3"/>
+            <rect x="215" y="82" width="140" height="30" rx="6" fill="#1e293b" stroke="#f59e0b"/>
+            <text x="285" y="101" fill="#fde68a" font-size="11" font-weight="bold" text-anchor="middle">Codo Óptimo: k = 4</text>
+            <!-- Etiquetas X -->
+            <text x="75" y="208" fill="#cbd5e1" font-size="11" text-anchor="middle">k=1</text>
+            <text x="145" y="208" fill="#cbd5e1" font-size="11" text-anchor="middle">k=2</text>
+            <text x="215" y="208" fill="#cbd5e1" font-size="11" text-anchor="middle">k=3</text>
+            <text x="285" y="208" fill="#fde68a" font-size="12" font-weight="bold" text-anchor="middle">k=4</text>
+            <text x="355" y="208" fill="#cbd5e1" font-size="11" text-anchor="middle">k=5</text>
+            <text x="425" y="208" fill="#cbd5e1" font-size="11" text-anchor="middle">k=6</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- LOS 4 REGÍMENES DESCUBIERTOS -->
+      <h3 style="font-size:1.05rem; margin-bottom:12px;">Interpretación Física y Operativa de los 4 Clusters Descubiertos</h3>
+      <div class="grid-4">
+        <div class="cluster-card c0">
+          <h4>🌙 Cluster 0: Operación Nocturna / Standby</h4>
+          <span class="cluster-pct">45,066 filas (42.8%)</span>
+          <div class="stat-list">
+            Radiación: 11.6 W/m²<br/>
+            Potencia:  -32.8 W<br/>
+            Temp Amb:   6.8 °C<br/>
+            Temp Panel: 6.0 °C
+          </div>
+          <p style="font-size:0.8rem; color:var(--muted);">
+            <strong>Física:</strong> Noche o madrugada fría. Los paneles están más fríos que el aire por pérdida radiativa nocturna y el inversor permanece en espera.
+          </p>
+        </div>
+
+        <div class="cluster-card c1">
+          <h4>🌤️ Cluster 1: Baja Radiación / Transición</h4>
+          <span class="cluster-pct">28,229 filas (26.8%)</span>
+          <div class="stat-list">
+            Radiación:  66.0 W/m²<br/>
+            Potencia: -179.7 W<br/>
+            Temp Amb:   15.3 °C<br/>
+            Temp Panel: 15.4 °C
+          </div>
+          <p style="font-size:0.8rem; color:var(--muted);">
+            <strong>Física:</strong> Amanecer, atardecer o días muy nublados. El panel e iguala la temperatura ambiente e inicia generación suave (~180 W).
+          </p>
+        </div>
+
+        <div class="cluster-card c2">
+          <h4>⚡ Cluster 2: Generación Media Óptima</h4>
+          <span class="cluster-pct">14,542 filas (13.8%)</span>
+          <div class="stat-list">
+            Radiación:   624.0 W/m²<br/>
+            Potencia: -1,821.4 W<br/>
+            Temp Amb:     21.1 °C<br/>
+            Temp Panel:   25.5 °C
+          </div>
+          <p style="font-size:0.8rem; color:var(--muted);">
+            <strong>Física:</strong> Media mañana o tarde despejada. Excelente eficiencia térmica: el panel solo supera en +4.4 °C al ambiente e inyecta ~1.82 kW.
+          </p>
+        </div>
+
+        <div class="cluster-card c3">
+          <h4>☀️ Cluster 3: Generación Pico / Carga Térmica</h4>
+          <span class="cluster-pct">17,379 filas (16.5%)</span>
+          <div class="stat-list">
+            Radiación:   954.1 W/m²<br/>
+            Potencia: -2,690.9 W<br/>
+            Temp Amb:     32.2 °C<br/>
+            Temp Panel:   39.7 °C
+          </div>
+          <p style="font-size:0.8rem; color:var(--muted);">
+            <strong>Física:</strong> Mediodía solar de alta radiación. Máxima inyección (~2.69 kW), pero el panel se calienta a ~40 °C (+7.5 °C sobre el ambiente).
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         ENTREGABLE 3: SIMULADOR DE AUTOMATIZACIÓN EN PRODUCCIÓN (FASTAPI)
+         ===================================================================== -->
+    <div class="section" id="entregable3">
+      <div class="sec-head">
+        <div class="sec-num">3</div>
+        <h2>Entregable 3: Simulador del Pipeline Automatizado en Producción (FastAPI + Clima/Fase Lunar)</h2>
+        <span class="sec-tag">02_entrenar_clasificador.py + main.py</span>
+      </div>
+
+      <p style="color:var(--muted); font-size:0.9rem; margin-bottom:14px;">
+        Prueba cómo responde el endpoint <code>POST /predict</code> de tu nuevo <code>Desafio_Lechuzas/main.py</code> ante lecturas de sensores y datos asociados de clima y fase lunar:
+      </p>
+
+      <div class="preset-row">
+        <button onclick="setSolarPreset(0)">🌙 Caso 1: Noche (Fila 1 del CSV)</button>
+        <button onclick="setSolarPreset(1)">🌤️ Caso 2: Amanecer (Fila 31 del CSV)</button>
+        <button onclick="setSolarPreset(2)">⚡ Caso 3: Media Mañana (Fila 34 del CSV)</button>
+        <button class="active-btn" onclick="setSolarPreset(3)">☀️ Caso 4: Mediodía Pico (Fila 39 del CSV)</button>
+        <button onclick="setSolarPreset(4)" style="border-color:var(--red); color:#fda4af;">🚨 Caso 5: Simular Falla de Inversor</button>
+      </div>
+
+      <div class="sim-inputs">
+        <div class="inp-box">
+          <label>Potencia del Inversor (W) <span id="vPot">-2897</span></label>
+          <input id="sPot" type="range" min="-3150" max="15" step="5" value="-2897" oninput="updateSolarSim()" />
+        </div>
+        <div class="inp-box">
+          <label>Radiación Solar (W/m²) <span id="vRad">946</span></label>
+          <input id="sRad" type="range" min="-5" max="1320" step="5" value="946" oninput="updateSolarSim()" />
+        </div>
+        <div class="inp-box">
+          <label>Temperatura Ambiente (°C) <span id="vTa">25.0</span></label>
+          <input id="sTa" type="range" min="-6" max="48" step="0.5" value="25" oninput="updateSolarSim()" />
+        </div>
+        <div class="inp-box">
+          <label>Temperatura Panel (°C) <span id="vTp">37.0</span></label>
+          <input id="sTp" type="range" min="-8" max="61" step="0.5" value="37" oninput="updateSolarSim()" />
+        </div>
+        <div class="inp-box">
+          <label>Dato Asociado: Condición Climática</label>
+          <select id="sClima" onchange="updateSolarSim()">
+            <option value="Despejado">☀️ Despejado</option>
+            <option value="Parcialmente Nublado">⛅ Parcialmente Nublado</option>
+            <option value="Nublado / Lluvia">🌧️ Nublado / Lluvia</option>
+            <option value="Polvo en suspensión">🌫️ Polvo en suspensión (Soiling)</option>
+          </select>
+        </div>
+        <div class="inp-box">
+          <label>Dato Asociado: Fase Lunar (Monitoreo Nocturno)</label>
+          <select id="sLuna" onchange="updateSolarSim()">
+            <option value="No aplica (Diurno)">☀️ No aplica (Operación Diurna)</option>
+            <option value="Luna Nueva">🌑 Luna Nueva</option>
+            <option value="Cuarto Creciente">🌓 Cuarto Creciente</option>
+            <option value="Luna Llena">🌕 Luna Llena</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <div style="font-size:0.82rem; color:var(--muted); margin-bottom:6px;">📥 JSON enviado a <code>POST http://127.0.0.1:8000/predict</code>:</div>
+          <pre id="reqJson"></pre>
+        </div>
+        <div>
+          <div style="font-size:0.82rem; color:var(--muted); margin-bottom:6px;">📤 Respuesta Automática de <code>main.py</code> (Server response):</div>
+          <pre id="resJson"></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         EVALUACIÓN 4: DEFENSA ORAL E INTERROGACIÓN TÉCNICA
+         ===================================================================== -->
+    <div class="section" id="evaluacion4">
+      <div class="sec-head">
+        <div class="sec-num">4</div>
+        <h2>Evaluación 4: Preguntas y Respuestas Clave para tu Interrogación Oral</h2>
+        <span class="sec-tag">Defensa Técnica</span>
+      </div>
+
+      <div class="qa-grid">
+        <div class="qa-card">
+          <h4>❓ 1. ¿Por qué elegiste K-Means en lugar de Clustering Jerárquico (Dendrograma) para este dataset?</h4>
+          <p>
+            <strong>Respuesta:</strong> Porque el dataset tiene <strong>105,216 registros</strong>. El Clustering Jerárquico necesita calcular una matriz de distancias de <code>105,216 × 105,216</code> (~11 mil millones de pares), lo que consume más de <strong>80 GB de memoria RAM</strong> (complejidad <code>O(N²)</code>). En cambio, K-Means tiene complejidad lineal <code>O(N·K)</code> y agrupa las 105,216 filas en menos de 1 segundo con centroides físicamente interpretables.
+          </p>
+        </div>
+
+        <div class="qa-card">
+          <h4>❓ 2. ¿Por qué aparecen valores negativos en <code>Radiacion</code> y en <code>Potencia</code> dentro del CSV?</h4>
+          <p>
+            <strong>Respuesta:</strong> Tienen causas físicas distintas:<br/>
+            • En <strong>Radiación</strong> (<code>-1</code> a <code>-10 W/m²</code> de noche), es un desvío térmico normal del sensor piranómetro cuando el cielo nocturno está más frío que el sensor; como no existe radiación solar negativa, se corrige a <code>0.0 W/m²</code>.<br/>
+            • En <strong>Potencia</strong> (<code>-3,133 W</code> al mediodía y <code>+8 W</code> de noche), es la convención de signo del inversor bidireccional: signo negativo significa <strong>energía generada/inyectada a la red</strong> y signo positivo significa pequeño consumo nocturno en espera.
+          </p>
+        </div>
+
+        <div class="qa-card">
+          <h4>❓ 3. ¿Cómo se transforma un problema de Clusterización (No Supervisado) en uno de Clasificación (Supervisado) para producción?</h4>
+          <p>
+            <strong>Respuesta:</strong> En dos etapas: primero usamos <strong>K-Means</strong> sobre los datos históricos para descubrir los 4 regímenes operativos y etiquetar cada fila con su número de cluster (<code>0, 1, 2, 3</code>). Luego usamos esa columna <code>cluster</code> como variable objetivo <code>y</code> para entrenar un <code>RandomForestClassifier</code> supervisado, que guardamos en <code>clasificador_solar_rf.pkl</code> junto con <code>scaler_solar.pkl</code> para responder en tiempo real desde FastAPI.
+          </p>
+        </div>
+
+        <div class="qa-card">
+          <h4>❓ 4. ¿Cómo justificaste que el número óptimo de clusters es K = 4?</h4>
+          <p>
+            <strong>Respuesta:</strong> Combinando el <strong>Método del Codo (Inercia/WCSS)</strong>, donde la caída de varianza se aplana a partir de <code>k=4</code> (bajando de 420,864 a 53,219), con métricas internas (<em>Silhouette Score</em>, <em>Davies-Bouldin</em> y <em>Calinski-Harabasz</em>) y validación física del negocio solar: los 4 grupos corresponden exactamente a <em>Noche</em>, <em>Transición/Baja radiación</em>, <em>Generación Media</em> y <em>Generación Pico</em>.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const SOLAR_PRESETS = [
+      { pot: 8.0, rad: -5.0, ta: 17.0, tp: 15.0, clima: "Despejado", luna: "Luna Llena" },
+      { pot: -641.0, rad: 142.0, ta: 14.0, tp: 12.0, clima: "Parcialmente Nublado", luna: "No aplica (Diurno)" },
+      { pot: -1852.0, rad: 511.0, ta: 22.0, tp: 25.0, clima: "Despejado", luna: "No aplica (Diurno)" },
+      { pot: -2897.0, rad: 946.0, ta: 25.0, tp: 37.0, clima: "Despejado", luna: "No aplica (Diurno)" },
+      { pot: 5.0, rad: 850.0, ta: 28.0, tp: 49.0, clima: "Despejado", luna: "No aplica (Diurno)" }
+    ];
+
+    // Centroides reales estandarizados de los 4 clusters ordenados (0=Noche, 1=Baja, 2=Media, 3=Pico)
+    const MEANS = [-758.47, 266.54, 15.28, 16.79];
+    const STDS  = [1116.18, 380.70, 9.94, 13.11];
+    const RAW_CENTERS = [
+      [-32.8, 11.6, 6.8, 6.0],
+      [-179.7, 66.0, 15.3, 15.4],
+      [-1821.4, 624.0, 21.1, 25.5],
+      [-2690.9, 954.1, 32.2, 39.7]
+    ];
+    const NAMES = [
+      "Operación Nocturna / Standby",
+      "Baja Radiación / Transición (Amanecer-Atardecer o Nublado)",
+      "Generación Media / Operación Templada Óptima",
+      "Generación Pico / Alta Carga Térmica"
+    ];
+    const RECS = [
+      "Monitoreo pasivo nocturno.",
+      "Operación normal en rampa de subida/bajada.",
+      "Inyección estable a red eléctrica.",
+      "Vigilar delta térmico del panel para evitar pérdida de eficiencia por calor."
+    ];
+
+    function setSolarPreset(idx) {
+      const p = SOLAR_PRESETS[idx];
+      document.getElementById('sPot').value = p.pot;
+      document.getElementById('sRad').value = p.rad;
+      document.getElementById('sTa').value = p.ta;
+      document.getElementById('sTp').value = p.tp;
+      document.getElementById('sClima').value = p.clima;
+      document.getElementById('sLuna').value = p.luna;
+      updateSolarSim();
+    }
+
+    function updateSolarSim() {
+      const pot = parseFloat(document.getElementById('sPot').value);
+      const rad = parseFloat(document.getElementById('sRad').value);
+      const ta  = parseFloat(document.getElementById('sTa').value);
+      const tp  = parseFloat(document.getElementById('sTp').value);
+      const clima = document.getElementById('sClima').value;
+      const luna  = document.getElementById('sLuna').value;
+
+      document.getElementById('vPot').textContent = pot.toFixed(0) + ' W';
+      document.getElementById('vRad').textContent = rad.toFixed(0) + ' W/m²';
+      document.getElementById('vTa').textContent  = ta.toFixed(1) + ' °C';
+      document.getElementById('vTp').textContent  = tp.toFixed(1) + ' °C';
+
+      const radClean = Math.max(0.0, rad);
+      const x = [pot, radClean, ta, tp];
+
+      // Distancia euclidiana en espacio escalado a los 4 centroides reales
+      let dists = RAW_CENTERS.map(c => {
+        let sum = 0;
+        for (let j = 0; j < 4; j++) {
+          let zx = (x[j] - MEANS[j]) / STDS[j];
+          let zc = (c[j] - MEANS[j]) / STDS[j];
+          sum += Math.pow(zx - zc, 2);
+        }
+        return Math.sqrt(sum);
+      });
+
+      let bestC = 0;
+      for (let i = 1; i < 4; i++) if (dists[i] < dists[bestC]) bestC = i;
+
+      // Softmax inverso sobre distancias para simular predict_proba
+      let exps = dists.map(d => Math.exp(-2.2 * d));
+      let sumExp = exps.reduce((a, b) => a + b, 0);
+      let conf = Math.min(0.9999, Math.max(0.55, exps[bestC] / sumExp));
+
+      const deltaT = Math.round((tp - ta) * 100) / 100;
+      const potGen = pot < 0 ? Math.abs(pot) : 0.0;
+
+      let alerta = "Sin anomalías";
+      if (radClean > 400 && pot >= 0) {
+        alerta = "ALERTA CRÍTICA: Alta radiación sin generación eléctrica (posible falla en inversor/fusible)";
+      } else if (tp >= 48.0 || deltaT >= 15.0) {
+        alerta = "ALERTA TÉRMICA: Sobrecalentamiento en superficie del panel (pérdida de eficiencia)";
+      }
+
+      document.getElementById('reqJson').textContent = JSON.stringify({
+        "Potencia": pot,
+        "Radiacion": rad,
+        "Temperatura": ta,
+        "Temperatura panel": tp,
+        "condicion_climatica": clima,
+        "fase_lunar": luna
+      }, null, 2);
+
+      document.getElementById('resJson').textContent = JSON.stringify({
+        "cluster": bestC,
+        "regimen_operativo": NAMES[bestC],
+        "confianza_modelo": Number(conf.toFixed(4)),
+        "potencia_generada_estimada_W": potGen,
+        "delta_termico_panel_C": deltaT,
+        "alerta_operativa": alerta,
+        "recomendacion": RECS[bestC],
+        "contexto_ambiental": {
+          "condicion_climatica": clima,
+          "fase_lunar": luna,
+          "radiacion_procesada_Wm2": radClean
+        }
+      }, null, 2);
+    }
+
+    updateSolarSim();
+  </script>
+</body>
+</html>

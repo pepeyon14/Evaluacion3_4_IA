@@ -1,0 +1,11 @@
+# Entornos virtuales y caché de Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Ignorar carpeta de práctica anterior (solo subir Desafío Lechuzas)
+Practica_Pulsares/
+
+# Dataset intermedio generado automáticamente por el Paso 1
+Desafio_Lechuzas/10 - lechuzas_etiquetado.csv
